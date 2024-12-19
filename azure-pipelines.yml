@@ -6,7 +6,7 @@ pool:
 
 variables: # les variables importantes
   - name: resourceGroupName
-    value: 'golem_gang'
+    value: 'T2CP'
   - name: rgLocation
     value: 'Canada Central'
   - name: AzureAppInfrastructure
@@ -16,7 +16,7 @@ variables: # les variables importantes
   - name: function2FolderName
     value: 'function2'
   - name: functionappname
-    value: 'golemfunctionapp'
+    value: 'devoirgurofunctionapp'
 
 stages:
 - stage: Infra
@@ -38,8 +38,8 @@ stages:
       inputs:
       # entrées pour noter déploiment
         deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'Abonnement Azure 1(0bfd432a-65a6-44cf-abf9-07b180cbbb7a)'
-        subscriptionId: '0bfd432a-65a6-44cf-abf9-07b180cbbb7a'
+        azureResourceManagerConnection: 'Azure subscription 1(2)(4752c137-48fe-4a21-ac6e-435c1d51dbe9)'
+        subscriptionId: '4752c137-48fe-4a21-ac6e-435c1d51dbe9'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(resourceGroupName)'
         location: '$(rgLocation)'
