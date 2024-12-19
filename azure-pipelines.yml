@@ -26,10 +26,15 @@ stages:
     displayName: Deploy Infrastructure
     steps:
     - script: |
-        echo Installing Chocolatey
-        @powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy AllSigned; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex"
-        choco --version
-      displayName: 'Install Chocolatey'
+        echo Checking for Chocolatey
+        if choco --version; then
+          echo Chocolatey is already installed, upgrading if necessary
+          choco upgrade chocolatey -y
+        else
+          echo Installing Chocolatey
+          @powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex"
+        fi
+      displayName: 'Install or Upgrade Chocolatey'
 
     # Installation de jq (Linux ou Windows selon l'agent)
     - script: |
