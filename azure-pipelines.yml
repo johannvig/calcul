@@ -124,11 +124,15 @@ stages:
       displayName: 'Install .NET SDK 8.0'
 
     - script: |
-        echo "Updating local.settings.json for Function2"
-        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json > $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp
-        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp > $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json
-        del /q $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp
-      displayName: 'Update Function2 local.settings.json'
+        echo "Updating local.settings.json for Function2 using PowerShell"
+        powershell -Command "& {
+            $sourcePath = '$(Build.SourcesDirectory)\$(function2FolderName)\local.settings.json';
+            $tempPath = '$(Build.SourcesDirectory)\$(function2FolderName)\local.settings.json.tmp';
+            jq '.Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"' $sourcePath > $tempPath;
+            jq '.Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"' $tempPath > $sourcePath;
+            Remove-Item -Force $tempPath;
+        }"
+      displayName: 'Update Function2 local.settings.json (PowerShell)'
 
     - script: |
         echo "Displaying updated local.settings.json for Function2"
