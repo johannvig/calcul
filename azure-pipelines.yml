@@ -85,11 +85,10 @@ stages:
 
     - script: |
         echo "Updating local.settings.json for Function1"
-        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json > $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp
-        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp > $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json
-        del /q $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp
+        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json" > "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp"
+        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp" > "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json"
+        del /q "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp"
       displayName: 'Update Function1 local.settings.json'
-
 
     - script: |
         echo "Displaying updated local.settings.json for Function1"
