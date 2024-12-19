@@ -6,13 +6,13 @@
       "value": "devoirguro"
     },
     "namespaces_golemsb_name": {
-      "value": "golemsb"
+      "value": "devoirguro"
     },
     "functionApp_name": {
-      "value": "golemfunctionapp"
+      "value": "devoirgurofunctionapp"
     },
     "hostingPlan_name": {
-      "value": "golemHostingPlan"
+      "value": "devoirguroHostingPlan"
     },
     "location": {
       "value": "canadacentral"
