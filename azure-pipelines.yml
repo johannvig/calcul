@@ -25,6 +25,16 @@ stages:
   - job: Deploy
     displayName: Deploy Infrastructure
     steps:
+    # Installation de jq (Linux ou Windows selon l'agent)
+    - script: |
+        echo "Installing jq"
+        if [ "$(uname)" = "Linux" ]; then
+          sudo apt-get update && sudo apt-get install -y jq
+        else
+          choco install jq -y
+        fi
+        jq --version
+      displayName: 'Install jq'
     # vérifications de notre fichier json
     - script: |
         echo "Validating azuredeploy.json"
