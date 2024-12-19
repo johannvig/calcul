@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccounts_golemsa_name": {
-      "value": "golemsa"
+      "value": "devoirguro"
     },
     "namespaces_golemsb_name": {
       "value": "golemsb"
