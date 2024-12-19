@@ -92,8 +92,9 @@ stages:
 
     - script: |
         echo "Displaying updated local.settings.json for Function1"
-        cat $(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json
+        type "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json"
       displayName: 'Show Function1 local.settings.json'
+
 
     - script: |
         echo "Debugging Variables for Function1 Deployment"
@@ -133,11 +134,12 @@ stages:
             Remove-Item -Force $tempPath;
         }"
       displayName: 'Update Function2 local.settings.json (PowerShell)'
-
+      
     - script: |
         echo "Displaying updated local.settings.json for Function2"
-        cat $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json
+        type "$(Build.SourcesDirectory)\$(function2FolderName)\local.settings.json"
       displayName: 'Show Function2 local.settings.json'
+
 
     - script: |
         echo "Debugging Variables for Function2 Deployment"
