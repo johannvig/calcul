@@ -1,7 +1,7 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=golemsa;AccountKey=YWYXdbNokrXWcfDyhgi7j1ikVkFIeI46BiEc7ZrVd/v7I9GZ7Rg0s3uRvbICUzGEYG14zp2/bBKh+AStRfH2UQ==;EndpointSuffix=core.windows.net",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=devoirguro;AccountKey=bv7/NlPf+62JXVtlYD1ncpcPVv8//Dx/ug3wX0dDqcwCs/zH9hfBoFcCOkSv6w6dVFRa4cVSnWlK+AStwl1Nlg==;EndpointSuffix=core.windows.net",
     "ServiceBusConnectionString": "Endpoint=sb://golemsb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vQ5ZJLeTGhy6HSJan+StNGVKfXH9L/lLB+ASbAu/D/E=",
     "ContainerName": "initialcontainer",
     "QueueName": "messagequeue",
