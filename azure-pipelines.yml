@@ -108,7 +108,7 @@ stages:
 
     - task: AzureFunctionApp@1
       inputs:
-        azureSubscription: 'Abonnement Azure 1(0bfd432a-65a6-44cf-abf9-07b180cbbb7a)'
+        azureSubscription: 'Azure subscription 1(2)(4752c137-48fe-4a21-ac6e-435c1d51dbe9)'
         appType: 'functionApp'
         appName: $(functionappname)
         package: '$(Build.ArtifactStagingDirectory)/function1'
@@ -148,7 +148,7 @@ stages:
 
     - task: AzureFunctionApp@1
       inputs:
-        azureSubscription: 'Abonnement Azure 1(0bfd432a-65a6-44cf-abf9-07b180cbbb7a)'
+        azureSubscription: 'Azure subscription 1(2)(4752c137-48fe-4a21-ac6e-435c1d51dbe9)'
         appType: 'functionApp'
         appName: $(functionappname)
         package: '$(Build.ArtifactStagingDirectory)/function2'
