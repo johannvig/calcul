@@ -3,21 +3,30 @@ trigger:
 
 pool: 'default'
 
-variables: # Variables globales importantes
-  resourceGroupName: 'T2CP'
-  rgLocation: 'Canada Central'
-  AzureAppInfrastructure: 'azure_deploy'
-  function1FolderName: 'function1'
-  function2FolderName: 'function2'
-  functionappname: 'devoirgurofunctionapp'
+variables: # les variables importantes
+  - name: resourceGroupName
+    value: 'T2CP'
+  - name: rgLocation
+    value: 'Canada Central'
+  - name: AzureAppInfrastructure
+    value: 'azure_deploy'
+  - name: function1FolderName
+    value: 'function1'
+  - name: function2FolderName
+    value: 'function2'
+  - name: functionappname
+    value: 'devoirgurofunctionapp'
 
 stages:
 - stage: Infra
   displayName: Infrastructure Deployment
   jobs:
+  # déploiement de l'infrastructure de base
   - job: Deploy
     displayName: Deploy Infrastructure
     steps:
+  
+    # vérifications de notre fichier json
     - script: |
         echo "Validating azuredeploy.json"
         jq . $(Build.SourcesDirectory)/azure_deploy/azuredeploy.json
@@ -27,6 +36,7 @@ stages:
 
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
+      # entrées pour noter déploiment
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: 'Azure subscription 1(2)(4752c137-48fe-4a21-ac6e-435c1d51dbe9)'
         subscriptionId: '4752c137-48fe-4a21-ac6e-435c1d51dbe9'
@@ -42,26 +52,29 @@ stages:
       name: DeployARM
       displayName: 'Deploy ARM Templates and Capture Outputs'
 
+      # on met les valeurs des outputs dans les variables du yaml
     - script: |
         echo "##vso[task.setvariable variable=storageAccountConnectionString;isOutput=true]$(deploymentOutputs.storageAccountConnectionString.value)"
         echo "##vso[task.setvariable variable=serviceBusConnectionString;isOutput=true]$(deploymentOutputs.serviceBusConnectionString.value)"
       name: setOutputs
       displayName: 'Expose ARM deployment outputs as pipeline variables'
 
+      #vérification des connexion strings
     - script: |
         echo "Debugging captured deployment outputs:"
         echo "Storage Account Connection String: $(deploymentOutputs.storageAccountConnectionString.value)"
         echo "Service Bus Connection String: $(deploymentOutputs.serviceBusConnectionString.value)"
       displayName: 'Debug Deployment Outputs'
 
-- stage: DeployFunctions
+- stage: DeployFunctions # on commence a déployer les fonctions
   displayName: Deploy Azure Functions
   dependsOn: Infra
   variables:
+    # On met les connexion strings dans des variables locales pour ce stage
     storageAccountConnectionString2: $[ dependencies.Infra.outputs['DeployARM.setOutputs.storageAccountConnectionString'] ]
     serviceBusConnectionString2: $[ dependencies.Infra.outputs['DeployARM.setOutputs.serviceBusConnectionString'] ]
   jobs:
-  - job: DeployFunction1
+  - job: DeployFunction1 # déploiement de la premiere fonction
     displayName: Deploy Function1
     steps:
     - task: UseDotNet@2
@@ -72,10 +85,22 @@ stages:
 
     - script: |
         echo "Updating local.settings.json for Function1"
-        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" "$(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json" > "$(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp"
-        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" "$(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp" > "$(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json"
-        del "$(Build.SourcesDirectory)/$(function1FolderName)/local.settings.json.tmp"
+        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json" > "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp"
+        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp" > "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json"
+        del /q "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json.tmp"
       displayName: 'Update Function1 local.settings.json'
+
+    - script: |
+        echo "Displaying updated local.settings.json for Function1"
+        type "$(Build.SourcesDirectory)\$(function1FolderName)\local.settings.json"
+      displayName: 'Show Function1 local.settings.json'
+
+
+    - script: |
+        echo "Debugging Variables for Function1 Deployment"
+        echo "Storage Account Connection String: $(storageAccountConnectionString2)"
+        echo "Service Bus Connection String: $(serviceBusConnectionString2)"
+      displayName: 'Debug Variables in DeployFunctions Stage'
 
     - script: |
         cd $(Build.SourcesDirectory)/$(function1FolderName)
@@ -90,7 +115,7 @@ stages:
         package: '$(Build.ArtifactStagingDirectory)/function1'
       displayName: 'Deploy Function1'
 
-  - job: DeployFunction2
+  - job: DeployFunction2 # déploiement de la premiere fonction
     displayName: Deploy Function2
     steps:
     - task: UseDotNet@2
@@ -101,10 +126,22 @@ stages:
 
     - script: |
         echo "Updating local.settings.json for Function2"
-        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" "$(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json" > "$(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp"
-        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" "$(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp" > "$(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json"
-        del "$(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp"
+        jq ".Values.AzureWebJobsStorage = \"$(storageAccountConnectionString2)\"" $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json > $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp
+        jq ".Values.ServiceBusConnectionString = \"$(serviceBusConnectionString2)\"" $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json.tmp > $(Build.SourcesDirectory)/$(function2FolderName)/local.settings.json
+        del /q "$(Build.SourcesDirectory)\$(function2FolderName)\local.settings.json.tmp"
       displayName: 'Update Function2 local.settings.json'
+      
+    - script: |
+        echo "Displaying updated local.settings.json for Function2"
+        type "$(Build.SourcesDirectory)\$(function2FolderName)\local.settings.json"
+      displayName: 'Show Function2 local.settings.json'
+
+
+    - script: |
+        echo "Debugging Variables for Function2 Deployment"
+        echo "Storage Account Connection String: $(storageAccountConnectionString2)"
+        echo "Service Bus Connection String: $(serviceBusConnectionString2)"
+      displayName: 'Debug Variables in DeployFunctions Stage'
 
     - script: |
         cd $(Build.SourcesDirectory)/$(function2FolderName)
