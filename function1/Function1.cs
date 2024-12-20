@@ -10,7 +10,7 @@ namespace QueueTriggerFunction
     public class Function1
     {
         private readonly ILogger<Function1> _logger;
-        private const string ServiceBusConnectionString = "<VotreChaîneDeConnexionServiceBus>"; // Remplacez par votre chaîne de connexion Service Bus
+        private const string ServiceBusConnectionString = "Endpoint=sb://devoirguro.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=TKKcqPGJw9JYIQNwikA4Ihv2qejQwxFvx+ASbKBLad4="; // Remplacez par votre chaîne de connexion Service Bus
         private const string QueueName = "messagequeue"; // Nom de la file d'attente
 
         public Function1(ILogger<Function1> logger)
