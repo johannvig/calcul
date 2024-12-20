@@ -11,7 +11,7 @@ namespace BlobManipulation
 {
     class Program
     {
-        private const string connectionString = "DefaultEndpointsProtocol=https;AccountName=gurostoragedemo;AccountKey=zHuaS9ILOACkcSbdEnr7bcsmLLPvBMOIjq5FtwcktrIUdOEtXGU02UGrtPKwGlPrqGX+mzRJEJI7+AStT22rTw==;EndpointSuffix=core.windows.net";
+        private const string connectionString = "DefaultEndpointsProtocol=https;AccountName=devoirguro;AccountKey=bv7/NlPf+62JXVtlYD1ncpcPVv8//Dx/ug3wX0dDqcwCs/zH9hfBoFcCOkSv6w6dVFRa4cVSnWlK+AStwl1Nlg==;EndpointSuffix=core.windows.net";
         private const string containerName = "initial";
         private const string containerName2 = "final";
 
